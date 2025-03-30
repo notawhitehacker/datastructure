@@ -145,7 +145,7 @@ CSparseMatrix CSparseMatrix::sumMatrix(const CSparseMatrix& A, const CSparseMatr
     CSparseMatrix result(static_cast<int>(sortedElements.size()) + 1);
     result.element[0] = {A.element[0].row, A.element[0].col, static_cast<int>(sortedElements.size())};
 
-    for (int i = 0; i < sortedElements.size(); ++i) {
+    for (int i = 0; i < (int)sortedElements.size(); ++i) {
         result.element[i + 1] = sortedElements[i];
     }
 
@@ -228,7 +228,7 @@ CSparseMatrix CSparseMatrix::multMatrix(const CSparseMatrix& A, const CSparseMat
     CSparseMatrix result(static_cast<int>(sortedElements.size()) + 1);
     result.element[0] = {A.element[0].row, B.element[0].col, static_cast<int>(sortedElements.size())};
 
-    for (int i = 0; i < sortedElements.size(); ++i) {
+    for (int i = 0; i < (int)sortedElements.size(); ++i) {
         result.element[i + 1] = sortedElements[i];
     }
 

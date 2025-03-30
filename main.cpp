@@ -3,15 +3,12 @@
 #include <iostream>
 #include <cstdlib>
 #include <chrono>
-#include <vector>
-#include <fstream>
 
 using namespace std;
 using namespace std::chrono;
 
 int main() {
     srand(time(0));
-    vector<int> sizes = {10, 50, 100, 200, 300, 400, 500};
 
     char answer = 'y';
     while (answer == 'y' || answer == 'Y') {
@@ -23,7 +20,6 @@ int main() {
         cout << "Matrix A" << endl;
         Matrix* mat1 = new Matrix(rows, cols);
         mat1->printMatrix();
-
         cout << "Matrix B" << endl;
         Matrix* mat2 = new Matrix(rows, cols);
         mat2->printMatrix();
@@ -48,7 +44,7 @@ int main() {
         cout << "Subtraction Time: " << durationSub << " ms\n";
         delete sub;
 
-        // Multiplication 
+        // Multiplication ㅡ맏 
         start = high_resolution_clock::now();
         Matrix* mul = mat1->multMatrix(*mat1, *mat2);
         end = high_resolution_clock::now();
@@ -71,97 +67,43 @@ int main() {
         cout << "=========================================" << endl;
         
         // 희소행렬 A,B 생성
-        cout << "\nSparse Matrix A" << endl;
-        CSparseMatrix sMat1 = CSparseMatrix::generateRandomSparseMatrix(rows, cols);
+        cout << "\n Generate Sparse Matrix A" << endl;
+        start = high_resolution_clock::now();
+        CSparseMatrix sMat1 = CSparseMatrix::structArraySparseMatrixCOO(*mat1);
+        end = high_resolution_clock::now();
         sMat1.printSparseMatrix();
+        auto duration = duration_cast<milliseconds>(end - start).count();
+        cout << "Convert to Sparse Matrix Time (A): " << duration << " ms\n";
 
-        cout << "\nSparse Matrix B" << endl;
-        CSparseMatrix sMat2 = CSparseMatrix::generateRandomSparseMatrix(rows, cols);
+        cout << "\n Generate Sparse Matrix B" << endl;
+        start = high_resolution_clock::now();
+        CSparseMatrix sMat2 = CSparseMatrix::structArraySparseMatrixCOO(*mat2);
+        end = high_resolution_clock::now();
         sMat2.printSparseMatrix();
-
-        
-        // Addition Time
-        start = high_resolution_clock::now();
-        CSparseMatrix addedSparse = CSparseMatrix::sumMatrix(sMat1, sMat2);
-        end = high_resolution_clock::now();
-        cout << "\nResult of Sparse A + B" << endl;
-        addedSparse.printSparseMatrix();
-        cout << "Sp-Addition Time: " << duration_cast<milliseconds>(end - start).count() << " ms\n";
-
-        // Subtraction Time
-        start = high_resolution_clock::now();
-        CSparseMatrix subSparse = CSparseMatrix::subtractMatrix(sMat1, sMat2);
-        end = high_resolution_clock::now();
-        cout << "\nResult of Sparse A - B:\n";
-        subSparse.printSparseMatrix();
-        cout << "Sp-Subtraction Time: " << duration_cast<milliseconds>(end - start).count() << " ms\n";
-
-        // Multiplecation Time
-        start = high_resolution_clock::now();
-        CSparseMatrix multipliedSparse = CSparseMatrix::multMatrix(sMat1, sMat2);
-        end = high_resolution_clock::now();
-        cout << "\nResult of Sparse A * B" << endl;
-        multipliedSparse.printSparseMatrix();
-        cout << "Sp-Multiplecation Time: " << duration_cast<milliseconds>(end - start).count() << " ms\n";
-        
-        // Element-wise Division Time
-        start = high_resolution_clock::now();
-        CSparseMatrix divSparse = CSparseMatrix::divideMatrix(sMat1, sMat2);
-        end = high_resolution_clock::now();
-        cout << "\nResult of Sparse A / B:\n";
-        divSparse.printSparseMatrix();
-        cout << "Sp-Element-wise Division Time: " << duration_cast<milliseconds>(end - start).count() << " ms\n";
-
-        cout << "=========================================" << endl;
+        duration = duration_cast<milliseconds>(end - start).count();
+        cout << "Convert to Sparse Matrix Time (B): " << duration << " ms\n";
 
         // matrix A,B를 전치한 전치함수 생성
         cout << "\nTranspose Matrix A" << endl;
+        start = high_resolution_clock::now();
         Matrix* transposedA = mat1->transposeMatrix(*mat1);
+        end = high_resolution_clock::now();
         transposedA->printMatrix();
+        duration = duration_cast<milliseconds>(end - start).count();
+        cout << "Transpose Matrix Time (A): " << duration << " ms\n";
         delete transposedA;
  
         cout << "\nTranspose Matrix B" << endl;
+        start = high_resolution_clock::now();
         Matrix* transposedB = mat2->transposeMatrix(*mat2);
+        end = high_resolution_clock::now();
         transposedB->printMatrix();
+        duration = duration_cast<milliseconds>(end - start).count();
+        cout << "Transpose Matrix Time (B): " << duration << " ms\n";
         delete transposedB;
-
-        //전치행렬 연산 - 덧셈
-        start = high_resolution_clock::now();
-        Matrix* transAdd = mat1->addTransposed(*mat1, *mat2);
-        end = high_resolution_clock::now();
-        cout << "\nResult of Transposed A + B:\n";
-        transAdd->printMatrix();
-        cout << "Transposed Addition Time: " << duration_cast<milliseconds>(end - start).count() << " ms\n";
-
-        // 전치행렬 연산 - 뺄셈
-        start = high_resolution_clock::now();
-        Matrix* transSub = mat1->subtractTransposed(*mat1, *mat2);
-        end = high_resolution_clock::now();
-        cout << "\nResult of Transposed A - B:\n";
-        transSub->printMatrix();
-        cout << "Transposed Subtraction Time: " << duration_cast<milliseconds>(end - start).count() << " ms\n";
-
-        // 전치행렬 연산 - 곱셈
-        start = high_resolution_clock::now();
-        Matrix* transMul = mat1->multiplyTransposed(*mat1, *mat2);
-        end = high_resolution_clock::now();
-        cout << "\nResult of Transposed A * B:\n";
-        transMul->printMatrix();
-        cout << "Transposed Multiplication Time: " << duration_cast<milliseconds>(end - start).count() << " ms\n";
-
-        // 전치행렬 연산 - 나눗셈
-        start = high_resolution_clock::now();
-        Matrix* transDiv = mat1->divideTransposed(*mat1, *mat2);
-        end = high_resolution_clock::now();
-        cout << "\nResult of Transposed A / B:\n";
-        transDiv->printMatrix();
-        cout << "Transposed Element-wise Division Time: " << duration_cast<milliseconds>(end - start).count() << " ms\n";
-
-        // 메모리 정리
-        delete transAdd;
-        delete transSub;
-        delete transMul;
-        delete transDiv;
+        /*
+        delete sMat1;
+        delete sMat2;*/
         delete mat1;
         delete mat2;
                

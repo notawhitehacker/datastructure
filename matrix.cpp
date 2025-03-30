@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <iomanip>
 #include <cmath> 
+#include <iostream>
 
 using namespace std;
 

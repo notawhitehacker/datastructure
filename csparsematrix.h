@@ -30,10 +30,14 @@ public:
 
     // 희소 행렬 연산
     static CSparseMatrix transposeMatrix(const CSparseMatrix& A);
-    static CSparseMatrix sumMatrix(const CSparseMatrix& A, const CSparseMatrix& B);
-    static CSparseMatrix subtractMatrix(const CSparseMatrix& A, const CSparseMatrix& B);
-    static CSparseMatrix divideMatrix(const CSparseMatrix& A, const CSparseMatrix& B);
-    static CSparseMatrix multMatrix(const CSparseMatrix& A, const CSparseMatrix& B);
+    static CSparseMatrix sumMatrix(const CSparseMatrix& A,
+                                    const CSparseMatrix& B);
+    static CSparseMatrix subtractMatrix(const CSparseMatrix& A,
+                                        const CSparseMatrix& B);
+    static CSparseMatrix divideMatrix(const CSparseMatrix& A,
+                                        const CSparseMatrix& B);
+    static CSparseMatrix multMatrix(const CSparseMatrix& A,
+                                    const CSparseMatrix& B);
 };
 
 // 정렬용 비교 함수 선언
